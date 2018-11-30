@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "Ew, Mail!",
+    "version": "1.0",
+
+    "description": "Ew, Mail! allows you to easily use a temp-mail.org mail when registering. This extension is not affiliated to temp-mail.org in any way!",
+    "homepage_url": "https://github.com/vantezzen/ewmail",
+    "icons": {
+        "48": "icons/icon-48.png"
+    },
+
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "https://temp-mail.org/",
+        "menus"
+    ],
+
+    "background": {
+        "scripts": ["background-scripts.js"]
+    }
+}
