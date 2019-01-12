@@ -3,6 +3,9 @@
     <a href="https://addons.mozilla.org/en-US/firefox/addon/ew-mail/">
         <img src="icons/firefox.png" alt="Availible on Firefox Add-Ons" width="150">
     </a>
+    <a href="https://chrome.google.com/webstore/detail/ew-mail/lidnahlamdofklamooajjnopnloljlgp">
+        <img src="icons/chrome.png" alt="Availible on chrome web store" width="150">
+    </a>
 </p>
 
 # Ew, Mail!
@@ -14,10 +17,8 @@ You just want to use that one website but it keeps bugging you to login to conti
 Let "Ew, Mail!" handle this situation for you! Simply right click on the email field and select "Use temporary mail". This will open temp-mail.org in the background for you and automatically insert the email address into the mail field.
 
 ## Installation
-Ew, Mail! is availible through the [Firefox Add-On Platform](https://addons.mozilla.org/en-US/firefox/addon/ew-mail/).
-You can also install this extension by downloading the source from GitHub and loading the unpacked extension through "about:debugging" as a "Temporary Add-On".
-
-Ew, Mail! is currently not availible for Chrome.
+Ew, Mail! is availible through the [Firefox Add-On Platform](https://addons.mozilla.org/en-US/firefox/addon/ew-mail/) and [chrome web store](https://chrome.google.com/webstore/detail/ew-mail/lidnahlamdofklamooajjnopnloljlgp).
+You can also install this extension on Firefox by downloading the source from GitHub and loading the unpacked extension through "about:debugging" as a "Temporary Add-On".
 
 ## Contributing
 Please fork this repository and create a new pull request to contribute to it.
