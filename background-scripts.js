@@ -13,10 +13,6 @@ chrome.contextMenus.create({
     id: "ewmail",
     title: "Use temporary mail",
     contexts: ["editable"],
-    // "icons": {
-    //     "16": "icons/icon-16.png",
-    //     "32": "icons/icon-32.png"
-    // }
 });
 
 // Script inserted to temp-mail to get the current email address
@@ -38,24 +34,70 @@ const tempMailGetMail = `
 // This is needed to fill the mail input on that page
 let currentTab;
 
+// Create loading animation to indicate activity
+let loadingAnimation;
+// Loading animation taken from https://github.com/sindresorhus/cli-spinners/blob/HEAD/spinners.json#L2-L15
+const loadingFrames = [
+    "⠋",
+    "⠙",
+    "⠹",
+    "⠸",
+    "⠼",
+    "⠴",
+    "⠦",
+    "⠧",
+    "⠇",
+    "⠏"
+];
+// Create a loading animation for the text
+const setLoadingAnimation = (text) => {
+    // Clear current animation
+    if (loadingAnimation) {
+        clearInterval(loadingAnimation);
+    }
+
+    let animationFrame = 0;
+    const renderAnimationFrame = () => {
+        // Render animation frame to input
+        setMail(`${text} ${loadingFrames[animationFrame % loadingFrames.length]}`, true);
+
+        // Stop after 5 seconds
+        // Otherwise the loading animation will block the input from being used normally
+        if (animationFrame >= 50) {
+            setMail(`${text}...`);
+            clearInterval(loadingAnimation);
+        }
+
+        // Progress to next frame
+        animationFrame++;
+    };
+
+    loadingAnimation = setInterval(renderAnimationFrame, 100);
+    renderAnimationFrame();
+}
+
 // Set mail input in current tab to value
-const setMail = (mail) => {
+const setMail = (mail, isAnimation = false) => {
+    // Reset animation
+    if (!isAnimation && loadingAnimation) {
+        clearInterval(loadingAnimation);
+    }
+
     chrome.tabs.sendMessage(currentTab.id, {
         action: 'insert_mail',
         data: mail,
     });
 }
 
-// Handle context menu click
+// Handle context menu click to insert temporary email
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
     currentTab = tab;
 
-    // Add temporary loading text into element while loading real mail
-    setMail("Loading... Opening temp-mail");
+    setLoadingAnimation("Opening temp-mail");
 
     // Action to perform once we got the right tab
     const mailTabAction = (mail_tab) => {
-        setMail("Waiting for temp-mail to load...");
+        setLoadingAnimation("Waiting for temp-mail to load");
 
         // Execute script in temp-mail.org tab to get mail address
         chrome.tabs.executeScript(mail_tab.id, {
@@ -82,6 +124,9 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 });
 
 // Listen for the current email address from temp-mail
+// Since temp-mail's new design, the email address won't be visible immediately so we have to wait
+// until its loaded. The injected script (tempMailGetMail) will send a runtime message as soon as
+// temp-mail is ready.
 chrome.runtime.onMessage.addListener((mail, event) => {
     // Insert mail into current page
     setMail(mail);
